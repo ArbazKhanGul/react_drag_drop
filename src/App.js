@@ -1,25 +1,27 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useState } from "react"
+import CreateTask from "./components/createTask";
+import ListTask from "./components/listTask";
+import { Toaster } from "react-hot-toast";
+import { HTML5Backend } from 'react-dnd-html5-backend'
+import { DndProvider } from 'react-dnd'
 
-function App() {
+export default function App() {
+  const [tasks,setTasks]=useState([]);
+
+  useEffect(()=>{
+    setTasks(JSON.parse(localStorage.getItem("tasks")) || [] )
+  },[])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <>
+    <DndProvider backend={HTML5Backend}>
+    <Toaster/>
+    <div className="bg-slate-100 w-screen h-screen flex flex-col text-center
+    items-center gap-16 pt-20">
+      <CreateTask tasks={tasks} setTasks={setTasks}/>
+      <ListTask tasks={tasks} setTasks={setTasks}/>
     </div>
-  );
+    </DndProvider>
+    </>
+  )
 }
-
-export default App;
